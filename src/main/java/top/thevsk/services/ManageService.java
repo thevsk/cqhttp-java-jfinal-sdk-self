@@ -39,13 +39,12 @@ public class ManageService {
         }
     }
 
-    @BotMessage(messageType = MessageType.PRIVATE, filter = "startWith:!clean|userId:2522534416")
+    @BotMessage(filter = "eq:!clean|userId:2522534416")
     public void clean(ApiRequest request, ApiResponse response) {
-        if (request.getMessage().trim().equals("?")) {
-            response.reply("image record show bface");
-            return;
+        String[] cleans = {"image", "record", "show", "bface"};
+        for (String clean : cleans) {
+            response.reply(ApiSystem.cleanDataDir(clean).toString());
         }
-        response.reply(ApiSystem.cleanDataDir(request.getMessage().trim()).toString());
     }
 
     @BotMessage(messageType = MessageType.PRIVATE, filter = "startWith:!noticeGroup|userId:2522534416")
