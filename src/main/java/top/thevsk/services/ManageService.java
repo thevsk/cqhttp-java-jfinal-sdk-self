@@ -17,7 +17,7 @@ import java.util.Map;
 @BotService
 public class ManageService {
 
-    @BotMessage(messageType = MessageType.PRIVATE, filter = "eq:!groupList|userId:2522534416")
+    @BotMessage(filter = "eq:!groupList|userId:2522534416")
     public void groupList(ApiRequest request, ApiResponse response) {
         try {
             ReturnJson returnJson = ApiGet.getGroupList();
@@ -47,20 +47,33 @@ public class ManageService {
         }
     }
 
-    @BotMessage(messageType = MessageType.PRIVATE, filter = "startWith:!noticeGroup|userId:2522534416")
+    @BotMessage(filter = "startWith:!noticeGroup|userId:2522534416")
     public void noticeGroup(ApiRequest request, ApiResponse response) {
-        ReturnJson returnJson = ApiGet.getGroupList();
-        if (returnJson.getRetcode() == 0) {
-            for (int i = 0; i < returnJson.getDataList().size(); i++) {
-                response.replyGroup(request.getMessage(), returnJson.getDataList().getJSONObject(i).getLong("group_id"));
+        try {
+            Map map = MessageUtils.parseMap(request.getMessage());
+            if (MessageUtils.getOrEx(map, "group").equals("all")) {
+                ReturnJson returnJson = ApiGet.getGroupList();
+                if (returnJson.getRetcode() == 0) {
+                    for (int i = 0; i < returnJson.getDataList().size(); i++) {
+                        response.replyGroup(MessageUtils.getOrEx(map, "msg"), returnJson.getDataList().getJSONObject(i).getLong("group_id"));
+                    }
+                } else
+                    response.reply("retCode:" + returnJson.getRetcode());
+            } else {
+                response.replyGroup(MessageUtils.getOrEx(map, "msg"), Long.valueOf(MessageUtils.getOrEx(map, "group")));
             }
-        } else
-            response.reply("retCode:" + returnJson.getRetcode());
+        } catch (Exception e) {
+            response.replyAt(e.getMessage());
+        }
     }
 
-    @BotMessage(messageType = MessageType.PRIVATE, filter = "startWith:!outGroup|userId:2522534416")
+    @BotMessage(filter = "startWith:!outGroup|userId:2522534416")
     public void outGroup(ApiRequest request, ApiResponse response) {
-        response.reply(ApiSet.setGroupLeave(Long.valueOf(request.getMessage().trim()), false).toString());
+        try {
+            response.reply(ApiSet.setGroupLeave(Long.valueOf(request.getMessage().trim()), false).toString());
+        } catch (Exception e) {
+            response.replyAt(e.getMessage());
+        }
     }
 
     @BotMessage(messageType = MessageType.GROUP, filter = "startWith:!rename|userId:2522534416")
