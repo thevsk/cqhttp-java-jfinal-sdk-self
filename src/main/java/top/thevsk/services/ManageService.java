@@ -17,7 +17,7 @@ import java.util.Map;
 @BotService
 public class ManageService {
 
-    @BotMessage(filter = "eq:!groupList|userId:2522534416")
+    @BotMessage(filter = "eq:!groupList")
     public void groupList(ApiRequest request, ApiResponse response) {
         try {
             ReturnJson returnJson = ApiGet.getGroupList();
@@ -39,7 +39,7 @@ public class ManageService {
         }
     }
 
-    @BotMessage(filter = "eq:!clean|userId:2522534416")
+    @BotMessage(filter = "eq:!clean")
     public void clean(ApiRequest request, ApiResponse response) {
         String[] cleans = {"image", "record", "show", "bface"};
         for (String clean : cleans) {
@@ -100,7 +100,7 @@ public class ManageService {
             if (userId == null) {
                 throw new Exception("no user");
             }
-            response.kick(userId);
+            response.reply(response.kick(userId).toString());
         } catch (Exception e) {
             response.replyAt(e.getMessage());
         }
