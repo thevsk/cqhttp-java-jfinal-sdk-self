@@ -4,8 +4,8 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.jfinal.core.Controller;
 import com.jfinal.kit.HttpKit;
+import com.jfinal.kit.LogKit;
 import com.jfinal.kit.StrKit;
-import com.jfinal.log.Log;
 import top.thevsk.annotation.BotMessage;
 import top.thevsk.entity.ApiRequest;
 import top.thevsk.entity.ApiResponse;
@@ -21,8 +21,6 @@ public class MainController extends Controller {
 
     public String body = null;
 
-    Log log = Log.getLog(MainController.class);
-
     public void index() {
         run();
         renderNull();
@@ -34,7 +32,7 @@ public class MainController extends Controller {
                 body = HttpKit.readData(getRequest());
             }
             ApiRequest apiRequest = new ApiRequest(JSONObject.parseObject(body));
-            log.info("[上报] 收到了消息 " + JSON.toJSONString(apiRequest));
+            LogKit.info("[上报] 收到了消息 " + JSON.toJSONString(apiRequest));
             Set<Method> methods = null;
             switch (apiRequest.getPostType()) {
                 case Constants.POST_TYPE_MESSAGE:
@@ -47,10 +45,10 @@ public class MainController extends Controller {
                     methods = BotServiceKit.getBotRequestMethods(apiRequest.getRequestType());
                     break;
                 default:
-                    log.warn("[上报] 收到了未知的消息类型");
+                    LogKit.warn("[上报] 收到了未知的消息类型");
             }
             if (methods.size() == 0) {
-                log.info("[上报] 没有找到能匹配信息的方法");
+                LogKit.info("[上报] 没有找到能匹配信息的方法");
                 return;
             }
             invoke(methods, apiRequest);

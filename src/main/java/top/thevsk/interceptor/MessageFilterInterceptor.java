@@ -25,7 +25,7 @@ public class MessageFilterInterceptor {
         }
     }
 
-    public boolean filterInv(String filter, ApiRequest request) {
+    private boolean filterInv(String filter, ApiRequest request) {
         if (filter.startsWith("eq:")) {
             return eqs(filter.replace("eq:", ""), request.getMessage());
         }

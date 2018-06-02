@@ -3,15 +3,13 @@ package top.thevsk.interceptor;
 import com.jfinal.aop.Interceptor;
 import com.jfinal.aop.Invocation;
 import com.jfinal.kit.HttpKit;
+import com.jfinal.kit.LogKit;
 import com.jfinal.kit.PropKit;
 import com.jfinal.kit.StrKit;
-import com.jfinal.log.Log;
 import top.thevsk.config.MainController;
 import top.thevsk.utils.HmacSHA1Utils;
 
 public class SecretInterceptor implements Interceptor {
-
-    Log log = Log.getLog(SecretInterceptor.class);
 
     @Override
     public void intercept(Invocation invocation) {
@@ -37,7 +35,7 @@ public class SecretInterceptor implements Interceptor {
     }
 
     private void onError(Invocation invocation) {
-        log.warn("[拦截器] Secret 传入了不合法的参数");
+        LogKit.warn("[拦截器] Secret 传入了不合法的参数");
         invocation.getController().redirect("https://www.google.com");
     }
 }
