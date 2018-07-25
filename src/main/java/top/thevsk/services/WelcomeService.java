@@ -15,9 +15,6 @@ public class WelcomeService {
     public void welcome(ApiRequest request, ApiResponse response) {
         if (request.isSelf()) return;
         response.reply("欢迎 [CQ:at,qq=" + request.getUserId() + "] 加入本群！");
-        if (request.getGroupId().equals(615524453L)) {
-            ask(response);
-        }
     }
 
     @BotEvent(eventType = EventType.GROUP_DECREASE)
@@ -25,16 +22,5 @@ public class WelcomeService {
         if (request.isSelf()) return;
         ReturnJson returnJson = ApiGet.getStrangerInfo(request.getUserId(), false);
         response.reply("成员 " + returnJson.getData().get("nickname") + " 「" + request.getUserId() + "」 离开本群");
-    }
-
-    private void ask(ApiResponse response) {
-        new Thread(() -> {
-            try {
-                Thread.sleep(2000);
-                response.replyAt("你是萌新嘛？");
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }).start();
     }
 }
