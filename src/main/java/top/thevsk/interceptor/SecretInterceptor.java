@@ -22,6 +22,10 @@ public class SecretInterceptor implements Interceptor {
             }
             String body = HttpKit.readData(invocation.getController().getRequest());
             String hmacSha1 = HmacSHA1Utils.hmacSha1(body.getBytes(), secret.getBytes());
+            if (hmacSha1 == null) {
+                onError(invocation);
+                return;
+            }
             if (!sha1.contains(hmacSha1.toLowerCase())) {
                 onError(invocation);
                 return;

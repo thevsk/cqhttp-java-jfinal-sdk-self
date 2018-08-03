@@ -1,4 +1,4 @@
-package top.thevsk.services;
+package cc.thevsk.services;
 
 import com.alibaba.fastjson.JSONObject;
 import com.jfinal.kit.HttpKit;

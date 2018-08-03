@@ -1,4 +1,4 @@
-package top.thevsk.services;
+package cc.thevsk.services;
 
 import top.thevsk.annotation.BotEvent;
 import top.thevsk.annotation.BotService;

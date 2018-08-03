@@ -1,7 +1,9 @@
-package top.thevsk.services;
+package cc.thevsk.services;
 
+import cc.thevsk.interceptor.MasterInterceptor;
 import top.thevsk.annotation.BotMessage;
 import top.thevsk.annotation.BotService;
+import top.thevsk.annotation.BotServiceAop;
 import top.thevsk.api.ApiGet;
 import top.thevsk.api.ApiSet;
 import top.thevsk.api.ApiSystem;
@@ -17,6 +19,7 @@ import java.util.HashSet;
 import java.util.Map;
 
 @BotService
+@BotServiceAop(MasterInterceptor.class)
 public class ManageService {
 
     @BotMessage(filter = "eq:!groupList")
@@ -49,7 +52,7 @@ public class ManageService {
         }
     }
 
-    @BotMessage(filter = "startWith:!noticeGroup|userId:2522534416")
+    @BotMessage(filter = "startWith:!noticeGroup")
     public void noticeGroup(ApiRequest request, ApiResponse response) {
         try {
             Map map = MessageUtils.parseMap(request.getMessage());
@@ -69,7 +72,7 @@ public class ManageService {
         }
     }
 
-    @BotMessage(filter = "startWith:!outGroup|userId:2522534416")
+    @BotMessage(filter = "startWith:!outGroup")
     public void outGroup(ApiRequest request, ApiResponse response) {
         try {
             response.reply(ApiSet.setGroupLeave(Long.valueOf(request.getMessage().trim()), false).toString());
@@ -78,7 +81,7 @@ public class ManageService {
         }
     }
 
-    @BotMessage(messageType = MessageType.GROUP, filter = "startWith:!rename|userId:2522534416")
+    @BotMessage(messageType = MessageType.GROUP, filter = "startWith:!rename")
     public void reGroupName(ApiRequest request, ApiResponse response) {
         try {
             Long userId;
@@ -95,7 +98,7 @@ public class ManageService {
         }
     }
 
-    @BotMessage(messageType = MessageType.GROUP, filter = "startWith:!kick|userId:2522534416")
+    @BotMessage(messageType = MessageType.GROUP, filter = "startWith:!kick")
     public void kick(ApiRequest request, ApiResponse response) {
         try {
             Long userId = CQUtils.getUserIdInCqAtMessage(request.getMessage().trim())[0];
@@ -108,7 +111,7 @@ public class ManageService {
         }
     }
 
-    @BotMessage(messageType = MessageType.GROUP, filter = "startWith:!ipGetter|userId:2522534416")
+    @BotMessage(messageType = MessageType.GROUP, filter = "startWith:!ipGetter")
     public void ipGetter(ApiRequest request, ApiResponse response) {
         if (Constants.cacheOfIp != null) {
             response.replyAt("being used...");

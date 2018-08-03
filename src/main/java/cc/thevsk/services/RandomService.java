@@ -1,11 +1,10 @@
-package top.thevsk.services;
+package cc.thevsk.services;
 
 import top.thevsk.annotation.BotMessage;
 import top.thevsk.annotation.BotService;
 import top.thevsk.entity.ApiRequest;
 import top.thevsk.entity.ApiResponse;
 import top.thevsk.enums.MessageType;
-import top.thevsk.utils.CQUtils;
 
 import java.util.Random;
 

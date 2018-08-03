@@ -11,7 +11,9 @@ import top.thevsk.entity.ApiRequest;
 import top.thevsk.entity.ApiResponse;
 import top.thevsk.entity.Constants;
 import top.thevsk.interceptor.MessageFilterInterceptor;
+import top.thevsk.interceptor.ServiceAopInterceptor;
 import top.thevsk.interceptor.ServiceInterceptor;
+import top.thevsk.interceptor.interfaces.BotServiceInterceptor;
 import top.thevsk.plugins.BotServiceKit;
 
 import java.lang.reflect.Method;
@@ -33,7 +35,7 @@ public class MainController extends Controller {
             }
             ApiRequest apiRequest = new ApiRequest(JSONObject.parseObject(body));
             LogKit.info("[上报] 收到了消息 " + JSON.toJSONString(apiRequest));
-            Set<Method> methods = null;
+            Set<Method> methods;
             switch (apiRequest.getPostType()) {
                 case Constants.POST_TYPE_MESSAGE:
                     methods = BotServiceKit.getBotMessageMethods(apiRequest.getMessageType());
@@ -46,6 +48,7 @@ public class MainController extends Controller {
                     break;
                 default:
                     LogKit.warn("[上报] 收到了未知的消息类型");
+                    return;
             }
             if (methods.size() == 0) {
                 LogKit.info("[上报] 没有找到能匹配信息的方法");
@@ -62,11 +65,7 @@ public class MainController extends Controller {
             return;
         }
         for (Method method : methods) {
-            try {
-                method.invoke(BotServiceKit.getClassInstanceByMethod(method), apiRequest, apiResponse);
-            } catch (Exception e) {
-                ServiceInterceptor.onError(method, apiRequest, e);
-            }
+            methodInvoker(method, apiRequest, apiResponse);
         }
     }
 
@@ -79,12 +78,26 @@ public class MainController extends Controller {
                 flag = MessageFilterInterceptor.getInstance().filter(filter, apiRequest);
             }
             if (flag) {
-                try {
-                    method.invoke(BotServiceKit.getClassInstanceByMethod(method), apiRequest, apiResponse);
-                } catch (Exception e) {
-                    ServiceInterceptor.onError(method, apiRequest, e);
-                }
+                methodInvoker(method, apiRequest, apiResponse);
             }
+        }
+    }
+
+    private void methodInvoker(Method method, ApiRequest apiRequest, ApiResponse apiResponse) {
+        Object[] aopInters = BotServiceKit.getClassAopInstanceByMethod(method);
+        for (Object object : aopInters) {
+            try {
+                if (!((BotServiceInterceptor) object).intercept(apiRequest, apiResponse)) {
+                    return;
+                }
+            } catch (Exception e) {
+                ServiceAopInterceptor.onError((BotServiceInterceptor) object, method, apiRequest, e);
+            }
+        }
+        try {
+            method.invoke(BotServiceKit.getClassInstanceByMethod(method), apiRequest, apiResponse);
+        } catch (Exception e) {
+            ServiceInterceptor.onError(method, apiRequest, e);
         }
     }
 }

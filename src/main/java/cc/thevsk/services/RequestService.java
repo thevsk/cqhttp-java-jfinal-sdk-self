@@ -1,4 +1,4 @@
-package top.thevsk.services;
+package cc.thevsk.services;
 
 import com.alibaba.fastjson.JSON;
 import top.thevsk.annotation.BotRequest;

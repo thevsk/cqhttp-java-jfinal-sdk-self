@@ -17,7 +17,7 @@ public class ImageController extends Controller {
     public void qrCode() {
         String ip = getIP();
         String msg = "IP::ip\r\n地区::address";
-        msg = msg.replace(":ip", ip.substring(0, ip.lastIndexOf(".")) + ".*");
+        msg = msg.replace(":ip", ip);
         try {
             DataBlock dataBlock = Constants.ip2regionSearcher.btreeSearch(ip);
             msg = msg.replace(":address", dataBlock.getRegion());
