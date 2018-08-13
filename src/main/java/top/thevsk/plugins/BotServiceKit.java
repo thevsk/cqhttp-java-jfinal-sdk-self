@@ -2,8 +2,8 @@ package top.thevsk.plugins;
 
 import com.jfinal.aop.Enhancer;
 import com.jfinal.kit.LogKit;
-import top.thevsk.annotation.BotEvent;
 import top.thevsk.annotation.BotMessage;
+import top.thevsk.annotation.BotNotice;
 import top.thevsk.annotation.BotRequest;
 import top.thevsk.annotation.BotServiceAop;
 import top.thevsk.enums.MessageType;
@@ -104,7 +104,7 @@ public class BotServiceKit {
             if (NoticeType.DEFAULT.equals(eventType)) continue;
             Set<Method> set = new HashSet<>();
             for (Method method : botEventMethods) {
-                BotEvent botEvent = method.getAnnotation(BotEvent.class);
+                BotNotice botEvent = method.getAnnotation(BotNotice.class);
                 if (eventType.equals(botEvent.noticeType())) {
                     set.add(method);
                 }

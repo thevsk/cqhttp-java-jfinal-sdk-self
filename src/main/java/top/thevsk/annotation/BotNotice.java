@@ -9,6 +9,6 @@ import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.METHOD})
-public @interface BotEvent {
+public @interface BotNotice {
     NoticeType noticeType() default NoticeType.DEFAULT;
 }
