@@ -6,18 +6,19 @@ import top.thevsk.api.ApiGet;
 import top.thevsk.entity.ApiRequest;
 import top.thevsk.entity.ApiResponse;
 import top.thevsk.entity.ReturnJson;
-import top.thevsk.enums.EventType;
+import top.thevsk.enums.NoticeType;
+import top.thevsk.utils.CQUtils;
 
 @BotService
 public class WelcomeService {
 
-    @BotEvent(eventType = EventType.GROUP_INCREASE)
+    @BotEvent(noticeType = NoticeType.GROUP_INCREASE)
     public void welcome(ApiRequest request, ApiResponse response) {
         if (request.isSelf()) return;
-        response.reply("欢迎 [CQ:at,qq=" + request.getUserId() + "] 加入本群！");
+        response.reply("欢迎 " + CQUtils.at(request.getUserId()) + " 加入本群！");
     }
 
-    @BotEvent(eventType = EventType.GROUP_DECREASE)
+    @BotEvent(noticeType = NoticeType.GROUP_DECREASE)
     public void leave(ApiRequest request, ApiResponse response) {
         if (request.isSelf()) return;
         ReturnJson returnJson = ApiGet.getStrangerInfo(request.getUserId(), false);
