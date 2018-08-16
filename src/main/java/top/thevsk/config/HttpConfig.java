@@ -1,5 +1,6 @@
 package top.thevsk.config;
 
+import cc.thevsk.config.AfterServerStarted;
 import com.jfinal.config.*;
 import com.jfinal.kit.LogKit;
 import com.jfinal.kit.PathKit;
@@ -40,6 +41,7 @@ public class HttpConfig extends JFinalConfig {
     public void afterJFinalStart() {
         BotServiceLoader botServiceLoader = new BotServiceLoader(PropKit.get("bot.service.packages").split(","));
         botServiceLoader.load();
+        AfterServerStarted.todo();
         LogKit.info("[服务] 启动完成");
         LogKit.info("[服务] 端口 " + PropKit.getInt("server.port"));
     }

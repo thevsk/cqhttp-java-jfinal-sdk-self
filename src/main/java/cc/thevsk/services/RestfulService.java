@@ -16,6 +16,8 @@ import top.thevsk.utils.MessageUtils;
 import java.util.HashMap;
 import java.util.Map;
 
+import static cc.thevsk.entity.Constants.dbCache;
+
 /**
  * @author thevsk
  * @Title: RestfulService
@@ -36,15 +38,19 @@ public class RestfulService {
         }
     };
 
-    @BotMessage(messageType = MessageType.GROUP, filter = "groupId:615524453|startWith:-,—,―,￣,＿")
+    @BotMessage(messageType = MessageType.GROUP, filter = "startWith:-,—,―,￣,＿")
     public void shipSearch(ApiRequest request, ApiResponse response) {
         try {
             String result = HttpKit.post(jFinalRestfulUrl + "/ship/search/" + request.getMessage().trim(), null, headers);
             JSONObject jsonObject = JSON.parseObject(result);
-            if (jsonObject.getInteger("code") != 200) {
-                response.reply("请求接口返回错误，CODE：" + jsonObject.getInteger("code"));
+            if (jsonObject.getInteger("code") == 200) {
+                Object objectMap = dbCache.executeQueryMap("select * from blShipGroupIds where groupId = ? ", request.getGroupId().toString());
+                if (objectMap == null) {
+                    response.reply("当前群没有碧蓝航线资料查询权限，若要添加权限请输入「添加碧蓝航线查询权限」");
+                } else {
+                    response.reply(jsonObject.getString("data"));
+                }
             }
-            response.reply(jsonObject.getString("data"));
         } catch (Exception e) {
             response.reply(e.getMessage());
         }
