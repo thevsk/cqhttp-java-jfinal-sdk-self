@@ -10,6 +10,9 @@ import top.thevsk.entity.ApiResponse;
 import top.thevsk.enums.MessageType;
 import top.thevsk.utils.CQUtils;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+
 @BotService
 public class TestService {
 
@@ -35,7 +38,18 @@ public class TestService {
 
     @BotMessage(messageType = MessageType.GROUP, filter = "startWith:!qr")
     public void qr(ApiRequest request, ApiResponse response) {
-        String path = "http://119.27.170.163:7500/qr/" + request.getMessage().trim() + "?t=_.jpg";
-        response.reply(CQUtils.image(path));
+        try {
+            String content = request.getMessage().trim();
+            if (content.startsWith("[CQ:image")) {
+                content = CQUtils.getUrlInCqImage(content)[0];
+            } else if (content.startsWith("[CQ:")) {
+                response.replyAt("不支持的格式");
+                return;
+            }
+            String path = "http://119.27.170.163:7500/qr?content=" + URLEncoder.encode(content, "utf-8") + "&t=_.jpg";
+            response.reply(CQUtils.image(path));
+        } catch (UnsupportedEncodingException e) {
+            response.replyAt(e.getMessage());
+        }
     }
 }

@@ -14,7 +14,7 @@ import com.jfinal.kit.StrKit;
 public class QrController extends Controller {
 
     public void index() {
-        String msg = getPara();
+        String msg = getPara("content");
         if (StrKit.isBlank(msg)) {
             renderQrCode("https://www.google.com", 260, 260);
         } else {
