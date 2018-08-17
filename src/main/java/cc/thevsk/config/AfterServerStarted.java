@@ -5,6 +5,7 @@ import cc.thevsk.utils.SQLiteUtils;
 import com.jfinal.kit.LogKit;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import static cc.thevsk.entity.Constants.dbCache;
 
@@ -17,6 +18,11 @@ import static cc.thevsk.entity.Constants.dbCache;
 public class AfterServerStarted {
 
     public static void todo() {
+        Constants.repeat2Last = new HashMap<>();
+        dbCache();
+    }
+
+    private static void dbCache() {
         try {
             LogKit.info("[数据库] [cache] 加载");
             dbCache = new SQLiteUtils(Constants.dbPathForCache);

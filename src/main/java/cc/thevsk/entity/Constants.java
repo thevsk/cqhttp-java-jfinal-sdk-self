@@ -3,6 +3,8 @@ package cc.thevsk.entity;
 import cc.thevsk.utils.SQLiteUtils;
 import top.thevsk.start.JettyStart;
 
+import java.util.HashMap;
+
 /**
  * @author thevsk
  * @Title: Constants
@@ -16,4 +18,6 @@ public class Constants {
     public static final String dbPathForCache = dbPath + "cache.db";
 
     public static SQLiteUtils dbCache;
+
+    public static HashMap<Long, String> repeat2Last;
 }

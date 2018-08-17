@@ -9,13 +9,11 @@ import top.thevsk.api.ApiSet;
 import top.thevsk.api.ApiSystem;
 import top.thevsk.entity.ApiRequest;
 import top.thevsk.entity.ApiResponse;
-import top.thevsk.entity.Constants;
 import top.thevsk.entity.ReturnJson;
 import top.thevsk.enums.MessageType;
 import top.thevsk.utils.CQUtils;
 import top.thevsk.utils.MessageUtils;
 
-import java.util.HashSet;
 import java.util.Map;
 
 @BotService
@@ -27,14 +25,17 @@ public class ManageService {
         try {
             ReturnJson returnJson = ApiGet.getGroupList();
             if (returnJson.getRetcode() == 0) {
-                StringBuffer sbf = new StringBuffer();
-                sbf.append("Num:" + returnJson.getDataList().size());
+                StringBuilder sbf = new StringBuilder();
+                sbf.append("Num:");
+                sbf.append(returnJson.getDataList().size());
                 sbf.append("\n");
                 for (int i = 0; i < returnJson.getDataList().size(); i++) {
                     if (i != 0) {
                         sbf.append("\n");
                     }
-                    sbf.append(returnJson.getDataList().getJSONObject(i).get("group_id") + ":" + returnJson.getDataList().getJSONObject(i).get("group_name"));
+                    sbf.append(returnJson.getDataList().getJSONObject(i).get("group_id"));
+                    sbf.append(":");
+                    sbf.append(returnJson.getDataList().getJSONObject(i).get("group_name"));
                 }
                 response.reply(sbf.toString());
             } else
@@ -49,26 +50,6 @@ public class ManageService {
         String[] cleans = {"image", "record", "show", "bface"};
         for (String clean : cleans) {
             response.reply(ApiSystem.cleanDataDir(clean).toString());
-        }
-    }
-
-    @BotMessage(filter = "startWith:!noticeGroup")
-    public void noticeGroup(ApiRequest request, ApiResponse response) {
-        try {
-            Map map = MessageUtils.parseMap(request.getMessage());
-            if (MessageUtils.getOrEx(map, "group").equals("all")) {
-                ReturnJson returnJson = ApiGet.getGroupList();
-                if (returnJson.getRetcode() == 0) {
-                    for (int i = 0; i < returnJson.getDataList().size(); i++) {
-                        response.replyGroup(MessageUtils.getOrEx(map, "msg"), returnJson.getDataList().getJSONObject(i).getLong("group_id"));
-                    }
-                } else
-                    response.reply("retCode:" + returnJson.getRetcode());
-            } else {
-                response.replyGroup(MessageUtils.getOrEx(map, "msg"), Long.valueOf(MessageUtils.getOrEx(map, "group")));
-            }
-        } catch (Exception e) {
-            response.replyAt(e.getMessage());
         }
     }
 
@@ -111,6 +92,7 @@ public class ManageService {
         }
     }
 
+    /*
     @BotMessage(messageType = MessageType.GROUP, filter = "startWith:!ipGetter")
     public void ipGetter(ApiRequest request, ApiResponse response) {
         if (Constants.cacheOfIp != null) {
@@ -151,4 +133,5 @@ public class ManageService {
             }
         }).start();
     }
+    */
 }

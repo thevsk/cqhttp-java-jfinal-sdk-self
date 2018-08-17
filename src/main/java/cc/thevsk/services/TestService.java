@@ -32,4 +32,10 @@ public class TestService {
             response.replyAt(e.getMessage());
         }
     }
+
+    @BotMessage(messageType = MessageType.GROUP, filter = "startWith:!qr")
+    public void qr(ApiRequest request, ApiResponse response) {
+        String path = "http://119.27.170.163:7500/qr/" + request.getMessage().trim() + "?t=_.jpg";
+        response.reply(CQUtils.image(path));
+    }
 }
