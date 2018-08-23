@@ -1,10 +1,13 @@
 package cc.thevsk.services;
 
+import cc.thevsk.interceptor.NoCqInterceptor;
+import cc.thevsk.interceptor.NoSudoInterceptor;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.jfinal.kit.HttpKit;
 import top.thevsk.annotation.BotMessage;
 import top.thevsk.annotation.BotService;
+import top.thevsk.annotation.BotServiceAop;
 import top.thevsk.entity.ApiRequest;
 import top.thevsk.entity.ApiResponse;
 import top.thevsk.enums.MessageType;
@@ -17,6 +20,7 @@ import java.net.URLEncoder;
 public class TestService {
 
     @BotMessage(messageType = MessageType.GROUP, filter = "startWith:!echo")
+    @BotServiceAop({NoCqInterceptor.class, NoSudoInterceptor.class})
     public void say(ApiRequest request, ApiResponse response) {
         response.reply(request.getMessage().trim());
     }
@@ -40,9 +44,9 @@ public class TestService {
     public void qr(ApiRequest request, ApiResponse response) {
         try {
             String content = request.getMessage().trim();
-            if (content.startsWith("[CQ:image")) {
+            if (content.contains("CQ:image")) {
                 content = CQUtils.getUrlInCqImage(content)[0];
-            } else if (content.startsWith("[CQ:")) {
+            } else if (content.contains("CQ:")) {
                 response.replyAt("不支持的格式");
                 return;
             }

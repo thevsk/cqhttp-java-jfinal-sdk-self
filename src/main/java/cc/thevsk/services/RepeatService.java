@@ -1,6 +1,7 @@
 package cc.thevsk.services;
 
 import cc.thevsk.interceptor.NoCqInterceptor;
+import cc.thevsk.interceptor.NoSudoInterceptor;
 import top.thevsk.annotation.BotMessage;
 import top.thevsk.annotation.BotService;
 import top.thevsk.annotation.BotServiceAop;
@@ -18,16 +19,9 @@ import static cc.thevsk.entity.Constants.repeat2Last;
  * @ProjectName cqhttp-java-jfinal-sdk
  * @date 2018-08-17 16:29
  */
+@BotServiceAop({NoSudoInterceptor.class, NoCqInterceptor.class})
 @BotService
 public class RepeatService {
-
-    @BotServiceAop(NoCqInterceptor.class)
-    @BotMessage(messageType = MessageType.GROUP)
-    public void repeat1(ApiRequest request, ApiResponse response) {
-        if (new Random().nextInt(100) == 0) {
-            response.reply(request.getMessage());
-        }
-    }
 
     @BotMessage(messageType = MessageType.GROUP)
     public void repeat2(ApiRequest request, ApiResponse response) {
@@ -35,8 +29,10 @@ public class RepeatService {
             repeat2Last.put(request.getGroupId(), request.getMessage());
         } else {
             if (request.getMessage().equals(repeat2Last.get(request.getGroupId()))) {
-                response.reply(request.getMessage());
                 repeat2Last.remove(request.getGroupId());
+                if (new Random().nextInt(10) == 0) {
+                    response.reply(request.getMessage());
+                }
             } else {
                 repeat2Last.put(request.getGroupId(), request.getMessage());
             }

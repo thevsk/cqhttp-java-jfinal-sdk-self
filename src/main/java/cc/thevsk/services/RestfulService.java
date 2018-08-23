@@ -42,7 +42,7 @@ public class RestfulService {
     public void shipSearch(ApiRequest request, ApiResponse response) {
         try {
             Object objectMap = dbCache.executeQueryMap("select * from blShipGroupIds where groupId = ? ", request.getGroupId().toString());
-            String result = HttpKit.post(jFinalRestfulUrl + "/ship/search/" + request.getMessage().trim(), null, headers);
+            String result = HttpKit.post(jFinalRestfulUrl + "/ship/search/" + request.getMessage().replace(" ", ""), null, headers);
             JSONObject jsonObject = JSON.parseObject(result);
             if (jsonObject.getInteger("code") == 200) {
                 if (objectMap == null) {

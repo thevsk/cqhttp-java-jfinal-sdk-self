@@ -1,10 +1,7 @@
 package cc.thevsk.utils;
 
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class SQLiteUtils {
 
@@ -13,6 +10,10 @@ public class SQLiteUtils {
     private Connection connection;
 
     private String filePath;
+
+    public static String uuid() {
+        return UUID.randomUUID().toString().replace("-", "");
+    }
 
     public SQLiteUtils(String filePath) throws Exception {
         this.filePath = filePath;
