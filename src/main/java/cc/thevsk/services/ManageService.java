@@ -114,7 +114,7 @@ public class ManageService {
             time = 5;
         }
         Constants.cacheOfIp = new HashSet<>();
-        String image = "http://119.27.170.163:7500/image/qrCode/" + System.currentTimeMillis() + "?t=qrCode.jpg";
+        String image = "http://thevsk.cc:7500/image/qrCode/" + System.currentTimeMillis() + "?t=qrCode.jpg";
         response.reply(CQUtils.share("https://www.baidu.com", "ipGetter", "by kd", image));
         final int finalTime = time * 1000;
         new Thread(() -> {

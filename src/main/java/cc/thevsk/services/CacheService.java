@@ -26,13 +26,13 @@ public class CacheService {
         try {
             Object result = dbCache.executeQueryMap("select * from blShipGroupIds where groupId = ? ", request.getGroupId().toString());
             if (result != null) {
-                response.reply("当前群已存在查询权限，若要移除权限请输入「解除碧蓝航线查询权限」");
+                response.replyText("ship.authority.on");
                 return;
             }
             dbCache.execute("insert into blShipGroupIds values (?);", request.getGroupId().toString());
-            response.reply("碧蓝航线查询权限已启用，若要移除权限请输入「解除碧蓝航线查询权限」");
+            response.replyText("ship.authority.on");
         } catch (Exception e) {
-            response.reply(e.getMessage());
+            response.replyText("error");
         }
     }
 
@@ -40,7 +40,7 @@ public class CacheService {
     public void blShipGroupIdDelete(ApiRequest request, ApiResponse response) {
         try {
             dbCache.execute("delete from blShipGroupIds where groupId = ? ", request.getGroupId().toString());
-            response.reply("解除成功");
+            response.replyText("ship.authority.off");
         } catch (Exception e) {
             response.reply(e.getMessage());
         }

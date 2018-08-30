@@ -50,7 +50,7 @@ public class TestService {
                 response.replyAt("不支持的格式");
                 return;
             }
-            String path = "http://119.27.170.163:7500/qr?content=" + URLEncoder.encode(content, "utf-8") + "&t=_.jpg";
+            String path = "http://thevsk.cc:7500/qr?content=" + URLEncoder.encode(content, "utf-8") + "&t=_.jpg";
             response.reply(CQUtils.image(path));
         } catch (UnsupportedEncodingException e) {
             response.replyAt(e.getMessage());

@@ -1,13 +1,11 @@
 package cc.thevsk.services;
 
-import cc.thevsk.interceptor.MasterInterceptor;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.jfinal.kit.HttpKit;
 import com.jfinal.kit.StrKit;
 import top.thevsk.annotation.BotMessage;
 import top.thevsk.annotation.BotService;
-import top.thevsk.annotation.BotServiceAop;
 import top.thevsk.entity.ApiRequest;
 import top.thevsk.entity.ApiResponse;
 import top.thevsk.enums.MessageType;
@@ -42,11 +40,12 @@ public class RestfulService {
     public void shipSearch(ApiRequest request, ApiResponse response) {
         try {
             Object objectMap = dbCache.executeQueryMap("select * from blShipGroupIds where groupId = ? ", request.getGroupId().toString());
-            String result = HttpKit.post(jFinalRestfulUrl + "/ship/search/" + request.getMessage().replace(" ", ""), null, headers);
+            String shipName = request.getMessage().replace(" ", "").replace(".", "");
+            String result = HttpKit.post(jFinalRestfulUrl + "/ship/search/" + shipName, null, headers);
             JSONObject jsonObject = JSON.parseObject(result);
             if (jsonObject.getInteger("code") == 200) {
                 if (objectMap == null) {
-                    response.reply("当前群没有碧蓝航线资料查询权限，若要添加权限请输入「添加碧蓝航线查询权限」");
+                    response.replyText("ship.authority.no");
                 } else {
                     response.reply(jsonObject.getString("data"));
                 }
@@ -56,44 +55,8 @@ public class RestfulService {
                 }
             }
         } catch (Exception e) {
-            response.reply(e.getMessage());
+            response.replyText("error");
         }
-    }
-
-    @BotServiceAop(MasterInterceptor.class)
-    @BotMessage(messageType = MessageType.GROUP, filter = "startWith:!read")
-    public void shipRead(ApiRequest request, ApiResponse response) {
-        String result = HttpKit.post(jFinalRestfulUrl + "/ship/read/" + request.getMessage().trim(), null, null, headers);
-        JSONObject jsonObject = JSON.parseObject(result);
-        if (jsonObject.getInteger("code") != 200) {
-            response.reply("请求接口返回错误，CODE：" + jsonObject.getInteger("code"));
-        }
-        response.reply(jsonObject.getString("data"));
-    }
-
-    @BotServiceAop(MasterInterceptor.class)
-    @BotMessage(messageType = MessageType.GROUP, filter = "startWith:!edit")
-    public void shipEdit(ApiRequest request, ApiResponse response) {
-        String[] str = request.getMessage().split("\r\n");
-        String _ = "";
-        for (int i = 0; i < str.length; i++) {
-            if (i == 0) continue;
-            if (i > 1) {
-                _ += "\r\n";
-            }
-            _ += str[i];
-        }
-        String content = _;
-        String result = HttpKit.post(jFinalRestfulUrl + "/ship/edit/" + str[0].trim(), new HashMap<String, String>() {
-            {
-                put("content", content);
-            }
-        }, null, headers);
-        JSONObject jsonObject = JSON.parseObject(result);
-        if (jsonObject.getInteger("code") != 200) {
-            response.reply("请求接口返回错误，CODE：" + jsonObject.getInteger("code"));
-        }
-        response.reply(jsonObject.getString("data"));
     }
 
     @BotMessage(messageType = MessageType.PRIVATE, filter = "startWith:绑定禅道")
