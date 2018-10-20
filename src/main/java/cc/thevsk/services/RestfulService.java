@@ -39,19 +39,23 @@ public class RestfulService {
     @BotMessage(messageType = MessageType.GROUP, filter = "startWith:-,—,―,￣,＿")
     public void shipSearch(ApiRequest request, ApiResponse response) {
         try {
-            Object objectMap = dbCache.executeQueryMap("select * from blShipGroupIds where groupId = ? ", request.getGroupId().toString());
+            Map<String, Object> objectMap = dbCache.executeQueryMap("select * from searchGroupId where groupId = ? ", request.getGroupId().toString());
             String shipName = request.getMessage().replace(" ", "").replace(".", "");
             String result = HttpKit.post(jFinalRestfulUrl + "/ship/search/" + shipName, null, headers);
             JSONObject jsonObject = JSON.parseObject(result);
             if (jsonObject.getInteger("code") == 200) {
                 if (objectMap == null) {
-                    response.replyText("ship.authority.no");
+                    response.replyText("authority.no");
                 } else {
-                    response.reply(jsonObject.getString("data"));
+                    if (objectMap.get("type").toString().equals("blhx")) {
+                        response.reply(jsonObject.getString("data"));
+                    }
                 }
             } else {
                 if (objectMap != null) {
-                    response.reply(jsonObject.getString("data"));
+                    if (objectMap.get("type").toString().equals("blhx")) {
+                        response.reply(jsonObject.getString("data"));
+                    }
                 }
             }
         } catch (Exception e) {

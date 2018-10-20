@@ -44,6 +44,24 @@ public class ApiResponse {
         return null;
     }
 
+    public void replyList(String message) {
+        if (message.contains(Constants.nextMsg)) {
+            String[] messages = message.split(Constants.nextMsg);
+            new Thread(() -> {
+                for (String msg : messages) {
+                    try {
+                        reply(msg);
+                        Thread.sleep(500);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }).start();
+        } else {
+            reply(message);
+        }
+    }
+
     /**
      * 回复消息，并且 @ 消息发送人
      *
