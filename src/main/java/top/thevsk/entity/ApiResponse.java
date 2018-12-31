@@ -1,6 +1,5 @@
 package top.thevsk.entity;
 
-import cc.thevsk.utils.TextUtils;
 import top.thevsk.api.ApiSend;
 import top.thevsk.api.ApiSet;
 import top.thevsk.enums.RequestType;
@@ -13,10 +12,6 @@ public class ApiResponse {
 
     public ApiResponse(ApiRequest apiRequest) {
         this.apiRequest = apiRequest;
-    }
-
-    public ReturnJson replyText(String name) {
-        return this.reply(TextUtils.get(name));
     }
 
     /**
@@ -51,7 +46,7 @@ public class ApiResponse {
                 for (String msg : messages) {
                     try {
                         reply(msg);
-                        Thread.sleep(500);
+                        Thread.sleep(1000);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
