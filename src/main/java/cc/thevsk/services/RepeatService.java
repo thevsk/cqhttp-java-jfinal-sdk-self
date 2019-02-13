@@ -23,7 +23,7 @@ import static cc.thevsk.entity.Constants.repeat2Last;
 @BotService
 public class RepeatService {
 
-    @BotMessage(messageType = MessageType.GROUP)
+    /*@BotMessage(messageType = MessageType.GROUP)
     public void repeat2(ApiRequest request, ApiResponse response) {
         if (repeat2Last.get(request.getGroupId()) == null) {
             repeat2Last.put(request.getGroupId(), request.getMessage());
@@ -37,5 +37,5 @@ public class RepeatService {
                 repeat2Last.put(request.getGroupId(), request.getMessage());
             }
         }
-    }
+    }*/
 }

@@ -31,30 +31,29 @@ public class RequestService {
             string.append("\n");
             string.append("群头像：");
             string.append(groupImage);
-            response.replyPrivate(string.toString(), 2522534416L);
             JSONObject userInfo = ApiGet.getStrangerInfo(request.getUserId(), true).getData();
-            StringBuilder string2 = new StringBuilder();
-            string2.append("邀请人信息");
-            string2.append("\n");
-            string2.append("QQ号：");
-            string2.append(request.getUserId().toString());
-            string2.append("\n");
-            string2.append("昵称：");
-            string2.append(userInfo.get("nickname"));
-            string2.append("\n");
-            string2.append("性别：");
-            string2.append(userInfo.get("sex"));
-            string2.append("\n");
-            string2.append("头像：");
-            string2.append(userImage);
-            response.replyPrivate(string2.toString(), 2522534416L);
-            response.replyPrivate("FLAG：", 2522534416L);
-            response.replyPrivate(request.getFlag(), 2522534416L);
+            string.append("邀请人信息");
+            string.append("\n");
+            string.append("QQ号：");
+            string.append(request.getUserId().toString());
+            string.append("\n");
+            string.append("昵称：");
+            string.append(userInfo.get("nickname"));
+            string.append("\n");
+            string.append("性别：");
+            string.append(userInfo.get("sex"));
+            string.append("\n");
+            string.append("头像：");
+            string.append(userImage);
+            string.append("\n");
+            string.append("FLAG：");
+            string.append(request.getFlag());
+            response.replyPrivate(string.toString(), 2522534416L);
         }
     }
 
     @BotServiceAop(MasterInterceptor.class)
-    @BotMessage(messageType = MessageType.PRIVATE, filter = "startWith:FLAG")
+    @BotMessage(messageType = MessageType.PRIVATE, filter = "startWith:Y")
     public void addGroup(ApiRequest request, ApiResponse response) {
         String flag = request.getMessage().trim();
         if (StrKit.isBlank(flag)) {
@@ -62,5 +61,16 @@ public class RequestService {
             return;
         }
         response.reply(ApiSet.setGroupAddRequest(flag, "invite", true, null).toString());
+    }
+
+    @BotServiceAop(MasterInterceptor.class)
+    @BotMessage(messageType = MessageType.PRIVATE, filter = "startWith:N")
+    public void noAddGroup(ApiRequest request, ApiResponse response) {
+        String flag = request.getMessage().trim();
+        if (StrKit.isBlank(flag)) {
+            response.reply("空FLAG");
+            return;
+        }
+        response.reply(ApiSet.setGroupAddRequest(flag, "invite", false, null).toString());
     }
 }
