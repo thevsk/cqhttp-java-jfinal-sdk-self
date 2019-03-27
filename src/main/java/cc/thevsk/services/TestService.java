@@ -29,4 +29,13 @@ public class TestService {
             response.replyAt(e.getMessage());
         }
     }
+
+    @BotMessage(messageType = MessageType.GROUP, filter = "userId:1000000")
+    public void banTest(ApiRequest request, ApiResponse response) {
+        String msg = request.getMessage();
+        if (msg.contains(request.getSelfId().toString()) && msg.contains("被管理员禁言") && (msg.contains("天") || msg.contains("小时"))) {
+            response.leave();
+            response.replyPrivate("由于被禁言而退群，群:" + request.getGroupId(), 2522534416L);
+        }
+    }
 }

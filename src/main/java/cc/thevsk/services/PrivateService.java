@@ -11,25 +11,6 @@ public class PrivateService {
 
     @BotMessage(messageType = MessageType.PRIVATE)
     public void menu(ApiRequest request, ApiResponse response) {
-        /*String message = request.getMessage();
-        Pattern pattern = Pattern.compile("[0-9]*");
-        Matcher isNum = pattern.matcher(message);
-        if (isNum.matches()) {
-            return;
-        }
-        String menu = "";
-        menu += "你找小歌有什么事呢？";
-        menu += "\r\n";
-        menu += "联系小歌的主人请回复1";
-        menu += "\r\n";
-        menu += "想加小歌好友请回复2";
-        menu += "\r\n";
-        menu += "想拉小歌到别的QQ群请回复3";
-        menu += "\r\n";
-        menu += "想查看小歌源码请回复4";
-        menu += "\r\n";
-        menu += "想查看游戏信息查询功能源码请回复5";
-        */
         String menu = "";
         menu += "使用帮助：";
         menu += "\r\n";
@@ -39,42 +20,13 @@ public class PrivateService {
         menu += "\r\n";
         menu += "暂无其他功能";
         menu += "\r\n";
-        menu += "注：小歌主要功能碧蓝航线游戏资料查询 主人随缘上线同意加群请求 有事请在QQ空间说说下留言 不定时查看";
+        menu += "所有功能仅在群内生效";
+        menu += "\r\n";
+        menu += "注：小歌主要功能碧蓝航线游戏资料查询 开发者随缘上线同意加群请求";
+        menu += "\r\n";
+        menu += "开发者：2522534416，提交BUG，建议，意见可加";
+        menu += "\r\n";
+        menu += "请不要禁言小歌，这将导致小歌主动退群";
         response.reply(menu);
     }
-
-    /*@BotMessage(messageType = MessageType.PRIVATE, filter = "eq:1")
-    public void action1(ApiRequest request, ApiResponse response) {
-        String msg = "";
-        msg += "小歌的主人QQ号： 2522534416";
-        response.reply(msg);
-    }
-
-    @BotMessage(messageType = MessageType.PRIVATE, filter = "eq:2")
-    public void action2(ApiRequest request, ApiResponse response) {
-        String msg = "";
-        msg += "功能未开发，请回复1";
-        response.reply(msg);
-    }
-
-    @BotMessage(messageType = MessageType.PRIVATE, filter = "eq:3")
-    public void action3(ApiRequest request, ApiResponse response) {
-        String msg = "";
-        msg += "功能未开发，请回复1";
-        response.reply(msg);
-    }
-
-    @BotMessage(messageType = MessageType.PRIVATE, filter = "eq:4")
-    public void action4(ApiRequest request, ApiResponse response) {
-        String msg = "";
-        msg += "GitHub：[ https://github.com/thevsk/cqhttp-java-jfinal-sdk-self ]";
-        response.reply(msg);
-    }
-
-    @BotMessage(messageType = MessageType.PRIVATE, filter = "eq:5")
-    public void action5(ApiRequest request, ApiResponse response) {
-        String msg = "";
-        msg += "GitHub：[ https://github.com/thevsk/thevsk-jsoup ]";
-        response.reply(msg);
-    }*/
 }

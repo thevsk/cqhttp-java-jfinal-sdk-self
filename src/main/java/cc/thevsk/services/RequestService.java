@@ -23,6 +23,7 @@ public class RequestService {
         if (request.getSubType().equals("invite")) {
             String groupImage = CQUtils.image("https://p.qlogo.cn/gh/" + request.getGroupId().toString() + "/" + request.getGroupId().toString() + "/100");
             String userImage = CQUtils.image("https://q1.qlogo.cn/g?b=qq&nk=" + request.getUserId().toString() + "&s=100");
+            JSONObject userInfo = ApiGet.getStrangerInfo(request.getUserId(), true).getData();
             StringBuilder string = new StringBuilder();
             string.append("收到加群请求");
             string.append("\n");
@@ -31,7 +32,7 @@ public class RequestService {
             string.append("\n");
             string.append("群头像：");
             string.append(groupImage);
-            JSONObject userInfo = ApiGet.getStrangerInfo(request.getUserId(), true).getData();
+            string.append("\n");
             string.append("邀请人信息");
             string.append("\n");
             string.append("QQ号：");
