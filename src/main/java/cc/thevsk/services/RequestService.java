@@ -1,24 +1,11 @@
 package cc.thevsk.services;
 
-import cc.thevsk.interceptor.MasterInterceptor;
-import com.alibaba.fastjson.JSONObject;
-import com.jfinal.kit.StrKit;
-import top.thevsk.annotation.BotMessage;
-import top.thevsk.annotation.BotRequest;
 import top.thevsk.annotation.BotService;
-import top.thevsk.annotation.BotServiceAop;
-import top.thevsk.api.ApiGet;
-import top.thevsk.api.ApiSet;
-import top.thevsk.entity.ApiRequest;
-import top.thevsk.entity.ApiResponse;
-import top.thevsk.enums.MessageType;
-import top.thevsk.enums.RequestType;
-import top.thevsk.utils.CQUtils;
 
 @BotService
 public class RequestService {
 
-    @BotRequest(requestType = RequestType.GROUP)
+    /*@BotRequest(requestType = RequestType.GROUP)
     public void group(ApiRequest request, ApiResponse response) {
         if (request.getSubType().equals("invite")) {
             String groupImage = CQUtils.image("https://p.qlogo.cn/gh/" + request.getGroupId().toString() + "/" + request.getGroupId().toString() + "/100");
@@ -73,5 +60,5 @@ public class RequestService {
             return;
         }
         response.reply(ApiSet.setGroupAddRequest(flag, "invite", false, null).toString());
-    }
+    }*/
 }
