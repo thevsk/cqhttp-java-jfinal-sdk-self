@@ -3,6 +3,7 @@ package cc.thevsk.services;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.jfinal.kit.HttpKit;
+import com.jfinal.kit.StrKit;
 import top.thevsk.annotation.BotMessage;
 import top.thevsk.annotation.BotService;
 import top.thevsk.entity.ApiRequest;
@@ -38,7 +39,9 @@ public class JsoupService {
         }, null, headers);
         JSONObject jsonObject = JSON.parseObject(result);
         if (jsonObject.getInteger("code") == 200 || jsonObject.getInteger("code") == 500) {
-            response.replyList(jsonObject.getString("data"));
+            if (!StrKit.isBlank(jsonObject.getString("data"))) {
+                response.replyList(jsonObject.getString("data"));
+            }
         }
     }
 }
