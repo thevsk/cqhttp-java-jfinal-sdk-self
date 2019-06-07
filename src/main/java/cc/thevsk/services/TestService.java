@@ -9,9 +9,22 @@ import top.thevsk.utils.CQUtils;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.Random;
 
 @BotService
 public class TestService {
+
+    @BotMessage(messageType = MessageType.GROUP, filter = "startWith:ROLL,roll")
+    public void roll(ApiRequest request, ApiResponse response) {
+        try {
+            int min = 1;
+            int max = Integer.valueOf(request.getMessage().trim()) + 1;
+            int res = new Random().nextInt(max - min) + min;
+            response.replyAt(res + "");
+        } catch (Exception e) {
+            e.getMessage();
+        }
+    }
 
     @BotMessage(messageType = MessageType.GROUP, filter = "startWith:!qr")
     public void qr(ApiRequest request, ApiResponse response) {
