@@ -9,6 +9,7 @@ import com.jfinal.template.Engine;
 import top.thevsk.controller.QrController;
 import top.thevsk.interceptor.SecretInterceptor;
 import top.thevsk.plugins.loader.BotServiceLoader;
+import top.thevsk.start.JettyStart;
 
 public class HttpConfig extends JFinalConfig {
 
@@ -45,5 +46,6 @@ public class HttpConfig extends JFinalConfig {
         AfterServerStarted.todo();
         LogKit.info("[服务] 启动完成");
         LogKit.info("[服务] 端口 " + PropKit.getInt("server.port"));
+        JettyStart.copyright();
     }
 }
