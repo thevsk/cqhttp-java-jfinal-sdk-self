@@ -1,15 +1,11 @@
 package cc.thevsk.services;
 
-import top.thevsk.annotation.BotMessage;
 import top.thevsk.annotation.BotService;
-import top.thevsk.entity.ApiRequest;
-import top.thevsk.entity.ApiResponse;
-import top.thevsk.enums.MessageType;
 
 @BotService
 public class PrivateService {
 
-    @BotMessage(messageType = MessageType.PRIVATE)
+    /*@BotMessage(messageType = MessageType.PRIVATE)
     public void menu(ApiRequest request, ApiResponse response) {
         String menu = "";
         menu += "使用帮助和其他说明：";
@@ -46,5 +42,5 @@ public class PrivateService {
         menu += "\r\n";
         menu += "16. 想到再补";
         response.reply(menu);
-    }
+    }*/
 }
