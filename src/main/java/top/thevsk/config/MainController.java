@@ -3,6 +3,7 @@ package top.thevsk.config;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.jfinal.core.Controller;
+import com.jfinal.ext.kit.DateKit;
 import com.jfinal.kit.HttpKit;
 import com.jfinal.kit.LogKit;
 import com.jfinal.kit.StrKit;
@@ -17,6 +18,7 @@ import top.thevsk.interceptor.interfaces.BotServiceInterceptor;
 import top.thevsk.plugins.BotServiceKit;
 
 import java.lang.reflect.Method;
+import java.util.Date;
 import java.util.Set;
 
 
@@ -35,7 +37,10 @@ public class MainController extends Controller {
                 body = HttpKit.readData(getRequest());
             }
             ApiRequest apiRequest = new ApiRequest(JSONObject.parseObject(body));
-            LogKit.info("[上报] 收到了消息 " + JSON.toJSONString(apiRequest));
+            if (apiRequest.getUserId().equals(2522534416L)) {
+                System.out.println("服务收到消息时间：" + DateKit.toStr(new Date(), DateKit.timeStampPattern));
+            }
+            // LogKit.info("[上报] 收到了消息 " + JSON.toJSONString(apiRequest));
             Set<Method> methods;
             switch (apiRequest.getPostType()) {
                 case Constants.POST_TYPE_MESSAGE:
@@ -48,11 +53,11 @@ public class MainController extends Controller {
                     methods = BotServiceKit.getBotRequestMethods(apiRequest.getRequestType());
                     break;
                 default:
-                    LogKit.warn("[上报] 收到了未知的消息类型");
+                    // LogKit.warn("[上报] 收到了未知的消息类型");
                     return;
             }
             if (methods.size() == 0) {
-                LogKit.info("[上报] 没有找到能匹配信息的方法");
+                // LogKit.info("[上报] 没有找到能匹配信息的方法");
                 return;
             }
             invoke(methods, apiRequest);
