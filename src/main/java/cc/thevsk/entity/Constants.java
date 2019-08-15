@@ -1,5 +1,6 @@
 package cc.thevsk.entity;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
@@ -11,4 +12,9 @@ import java.util.HashMap;
 public class Constants {
 
     public static HashMap<Long, String> repeat2Last;
+
+    public static ArrayList<Talk> talks;
+
+    public static final String PARAM_SPLIT = "-";
+
 }
