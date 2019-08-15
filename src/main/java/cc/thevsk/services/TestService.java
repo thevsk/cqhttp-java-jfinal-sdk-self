@@ -54,7 +54,7 @@ public class TestService {
         }
     }
 
-    @BotMessage(messageType = MessageType.GROUP)
+    /*@BotMessage(messageType = MessageType.GROUP)
     public void withTalk(ApiRequest request, ApiResponse response) {
         for (Talk talk : Constants.talks) {
             if (talk == null) continue;
@@ -86,5 +86,5 @@ public class TestService {
         } else {
             response.reply(talk.getReply().replace("{@u}", CQUtils.at(request.getUserId())));
         }
-    }
+    }*/
 }

@@ -26,7 +26,7 @@ public class TestGroupService {
         response.replyAt("reply,at:" + DateKit.toStr(new Date(), DateKit.timeStampPattern));
     }
 
-    @BotMessage(messageType = MessageType.GROUP, filter = "startWith:addt")
+    /*@BotMessage(messageType = MessageType.GROUP, filter = "startWith:addt")
     public void addt(ApiRequest request, ApiResponse response) {
         try {
             ParamsUtils paramsUtils = new ParamsUtils(request.getMessage());
@@ -158,5 +158,5 @@ public class TestGroupService {
         } catch (Exception e) {
             response.replyAt("发生错误，帮助：deletet -h");
         }
-    }
+    }*/
 }
