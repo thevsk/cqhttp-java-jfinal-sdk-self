@@ -1,7 +1,7 @@
 package cc.thevsk.entity;
 
-import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 
 /**
  * @author thevsk
@@ -13,7 +13,7 @@ public class Constants {
 
     public static HashMap<Long, String> repeat2Last;
 
-    public static ArrayList<Talk> talks;
+    public static LinkedList<Talk> talks;
 
     public static final String PARAM_SPLIT = "-";
 

@@ -4,6 +4,7 @@ import cc.thevsk.entity.Constants;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 
 /**
  * @author thevsk
@@ -15,6 +16,6 @@ public class AfterServerStarted {
 
     public static void todo() {
         Constants.repeat2Last = new HashMap<>();
-        Constants.talks = new ArrayList<>();
+        Constants.talks = new LinkedList<>();
     }
 }

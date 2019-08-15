@@ -1,5 +1,7 @@
 package cc.thevsk.services;
 
+import cc.thevsk.entity.Constants;
+import cc.thevsk.entity.Talk;
 import top.thevsk.annotation.BotMessage;
 import top.thevsk.annotation.BotService;
 import top.thevsk.entity.ApiRequest;
@@ -49,6 +51,40 @@ public class TestService {
         if (msg.contains(request.getSelfId().toString()) && msg.contains("被管理员禁言") && (msg.contains("天") || msg.contains("小时"))) {
             response.leave();
             response.replyPrivate("由于被禁言而退群，群:" + request.getGroupId(), 2522534416L);
+        }
+    }
+
+    @BotMessage(messageType = MessageType.GROUP)
+    public void withTalk(ApiRequest request, ApiResponse response) {
+        for (Talk talk : Constants.talks) {
+            if (talk == null) continue;
+            switch (talk.getType()) {
+                case equals:
+                    if (request.getMessage().equals(talk.getMessage())) {
+                        talkTo(talk, request, response);
+                    }
+                    break;
+                case contains:
+                    if (request.getMessage().contains(talk.getMessage())) {
+                        // talkTo(talk, request, response);
+                    }
+                    break;
+                case startsWith:
+                    if (request.getMessage().startsWith(talk.getMessage())) {
+                        talkTo(talk, request, response);
+                    }
+                    break;
+            }
+        }
+    }
+
+    private void talkTo(Talk talk, ApiRequest request, ApiResponse response) {
+        if (talk.getPrivateUser() != null) {
+            if (talk.getPrivateUser().equals(request.getUserId())) {
+                response.reply(talk.getReply().replace("{@u}", CQUtils.at(request.getUserId())));
+            }
+        } else {
+            response.reply(talk.getReply().replace("{@u}", CQUtils.at(request.getUserId())));
         }
     }
 }

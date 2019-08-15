@@ -5,6 +5,7 @@ public class Talk {
     private Type type;
     private Long privateUser;
     private String reply;
+    private Long author;
 
     public Long getPrivateUser() {
         return privateUser;
@@ -38,7 +39,15 @@ public class Talk {
         this.message = message;
     }
 
+    public Long getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(Long author) {
+        this.author = author;
+    }
+
     public static enum Type {
-        contains,equals,startsWith,endsWith
+        contains,equals,startsWith
     }
 }

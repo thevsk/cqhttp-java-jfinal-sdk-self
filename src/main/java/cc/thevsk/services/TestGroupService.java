@@ -26,18 +26,18 @@ public class TestGroupService {
         response.replyAt("reply,at:" + DateKit.toStr(new Date(), DateKit.timeStampPattern));
     }
 
-    @BotMessage(messageType = MessageType.GROUP, filter = "startWith:addTalk")
-    public void addTalk(ApiRequest request, ApiResponse response) {
+    @BotMessage(messageType = MessageType.GROUP, filter = "startWith:addt")
+    public void addt(ApiRequest request, ApiResponse response) {
         try {
             ParamsUtils paramsUtils = new ParamsUtils(request.getMessage());
             String help = paramsUtils.getValueTrim("help", "h");
             if (help != null) {
                 String reply = "";
-                reply += "addTalk";
+                reply += "addt 添加对话";
                 reply += "\r\n";
                 reply += "    -message -m [必填] #触发回复的内容";
                 reply += "\r\n";
-                reply += "    -type -t [默认值:e] #触发回复的方式，可选 contains/c equals/e startsWith/sw endsWith/ew";
+                reply += "    -type -t [默认值:e] #触发回复的方式，可选 contains/c equals/e startsWith/sw";
                 reply += "\r\n";
                 reply += "    -reply -r [必填] #回复内容，用{@u}可以艾特正在交谈的用户";
                 reply += "\r\n";
@@ -54,14 +54,14 @@ public class TestGroupService {
             String privateUser = paramsUtils.getValueTrim("privateUser", "pu");
             Long privateUserLong = null;
             if (StrKit.isBlank(message) || StrKit.isBlank(reply)) {
-                response.replyAt("必填项为空，帮助：addTalk -h");
+                response.replyAt("必填项为空，帮助：addt -h");
                 return;
             }
             if (!StrKit.isBlank(privateUser)) {
                 try {
                     privateUserLong = Long.valueOf(privateUser);
                 } catch (Exception e) {
-                    response.replyAt("privateUser 转换 Long 失败，帮助：addTalk -h");
+                    response.replyAt("privateUser 转换 Long 失败，帮助：addt -h");
                     return;
                 }
             }
@@ -78,12 +78,8 @@ public class TestGroupService {
                 case "sw":
                     typeEnum = Talk.Type.startsWith;
                     break;
-                case "endsWith":
-                case "ew":
-                    typeEnum = Talk.Type.endsWith;
-                    break;
                 default:
-                    response.replyAt("type 转换 Enum 失败，帮助：addTalk -h");
+                    response.replyAt("type 转换 Enum 失败，帮助：addt -h");
                     return;
             }
             Talk talk = new Talk();
@@ -91,47 +87,76 @@ public class TestGroupService {
             talk.setReply(reply);
             talk.setPrivateUser(privateUserLong);
             talk.setType(typeEnum);
+            talk.setAuthor(request.getUserId());
             Constants.talks.add(talk);
+            response.reply("success");
         } catch (Exception e) {
-            response.replyAt("发生错误，帮助：addTalk -h");
+            response.replyAt("发生错误，帮助：addt -h");
         }
     }
 
-    @BotMessage(messageType = MessageType.GROUP)
-    public void withTalk(ApiRequest request, ApiResponse response) {
+    @BotMessage(messageType = MessageType.GROUP, filter = "eq:listt")
+    public void listt(ApiRequest request, ApiResponse response) {
+        StringBuilder reply = new StringBuilder();
         for (Talk talk : Constants.talks) {
-            switch (talk.getType()) {
-                case equals:
-                    if (request.getMessage().equals(talk.getMessage())) {
-                        talkTo(talk, request, response);
-                    }
-                    break;
-                case contains:
-                    if (request.getMessage().contains(talk.getMessage())) {
-                        talkTo(talk, request, response);
-                    }
-                    break;
-                case endsWith:
-                    if (request.getMessage().equals(talk.getMessage())) {
-                        talkTo(talk, request, response);
-                    }
-                    break;
-                case startsWith:
-                    if (request.getMessage().startsWith(talk.getMessage())) {
-                        talkTo(talk, request, response);
-                    }
-                    break;
-            }
+            if (talk == null) continue;
+            reply.append("\r\n");
+            reply.append(" m:");
+            reply.append(talk.getMessage());
+            reply.append(" r:");
+            reply.append(talk.getReply());
+            reply.append(" t:");
+            reply.append(talk.getType().toString());
+            reply.append(" a:");
+            reply.append(talk.getAuthor().toString());
         }
+        response.reply(reply.toString());
     }
 
-    private void talkTo(Talk talk, ApiRequest request, ApiResponse response) {
-        if (talk.getPrivateUser() != null) {
-            if (talk.getPrivateUser().equals(request.getUserId())) {
-                response.reply(talk.getReply().replace("{@u}", CQUtils.at(request.getUserId())));
+    @BotMessage(messageType = MessageType.GROUP, filter = "startWith:deletet")
+    public void deletet(ApiRequest request, ApiResponse response) {
+        try {
+            int count = 0;
+            ParamsUtils paramsUtils = new ParamsUtils(request.getMessage());
+            String help = paramsUtils.getValueTrim("help", "h");
+            if (help != null) {
+                String reply = "";
+                reply += "deletet 删除对话";
+                reply += "\r\n";
+                reply += "    -message -m #模糊匹配 触发内容";
+                reply += "\r\n";
+                reply += "    -reply -r #模糊匹配 回复";
+                reply += "\r\n";
+                reply += "    -author -a #精准匹配 创建人";
+                reply += "\r\n";
+                reply += "    -help -h #帮助";
+                response.reply(reply);
+                return;
             }
-        } else {
-            response.reply(talk.getReply().replace("{@u}", CQUtils.at(request.getUserId())));
+            String message = paramsUtils.getValueTrim("message", "m");
+            String reply = paramsUtils.getValueTrim("reply", "r");
+            String author = paramsUtils.getValueTrim("author", "a");
+            for (int i = 0; i < Constants.talks.size(); i++) {
+                if (Constants.talks.get(i) == null) continue;
+                Talk talk = Constants.talks.get(i);
+                if (message != null && talk.getMessage().contains(message)) {
+                    Constants.talks.remove(i);
+                    count++;
+                    continue;
+                }
+                if (reply != null && talk.getReply().contains(reply)) {
+                    Constants.talks.remove(i);
+                    count++;
+                    continue;
+                }
+                if (author != null && talk.getAuthor().equals(Long.valueOf(author))) {
+                    Constants.talks.remove(i);
+                    count++;
+                }
+            }
+            response.reply("delete count " + count);
+        } catch (Exception e) {
+            response.replyAt("发生错误，帮助：deletet -h");
         }
     }
 }
