@@ -1,7 +1,5 @@
 package cc.thevsk.services;
 
-import cc.thevsk.entity.Constants;
-import cc.thevsk.entity.Talk;
 import top.thevsk.annotation.BotMessage;
 import top.thevsk.annotation.BotService;
 import top.thevsk.entity.ApiRequest;
@@ -48,43 +46,32 @@ public class TestService {
     @BotMessage(messageType = MessageType.GROUP, filter = "userId:1000000")
     public void banTest(ApiRequest request, ApiResponse response) {
         String msg = request.getMessage();
-        if (msg.contains(request.getSelfId().toString()) && msg.contains("被管理员禁言") && (msg.contains("天") || msg.contains("小时"))) {
+        if (msg.contains(request.getSelfId().toString()) && msg.contains("被管理员禁言") && (msg.contains("天"))) {
             response.leave();
             response.replyPrivate("由于被禁言而退群，群:" + request.getGroupId(), 2522534416L);
         }
     }
 
-    /*@BotMessage(messageType = MessageType.GROUP)
-    public void withTalk(ApiRequest request, ApiResponse response) {
-        for (Talk talk : Constants.talks) {
-            if (talk == null) continue;
-            switch (talk.getType()) {
-                case equals:
-                    if (request.getMessage().equals(talk.getMessage())) {
-                        talkTo(talk, request, response);
-                    }
-                    break;
-                case contains:
-                    if (request.getMessage().contains(talk.getMessage())) {
-                        // talkTo(talk, request, response);
-                    }
-                    break;
-                case startsWith:
-                    if (request.getMessage().startsWith(talk.getMessage())) {
-                        talkTo(talk, request, response);
-                    }
-                    break;
+    @BotMessage(messageType = MessageType.GROUP, filter = "startWith:#")
+    public void check(ApiRequest request, ApiResponse response) {
+        try {
+            if (request.getMessage().equals("查询二次元浓度")) {
+                int res = new Random().nextInt(4);
+                String temp;
+                switch (res) {
+                    case 1:
+                        temp = "0.6657%";
+                        break;
+                    case 2:
+                        temp = "66.57%";
+                        break;
+                    default:
+                        temp = "6657%";
+                }
+                response.reply("二次元浓度：" + temp);
             }
+        } catch (Exception e) {
+            e.getMessage();
         }
     }
-
-    private void talkTo(Talk talk, ApiRequest request, ApiResponse response) {
-        if (talk.getPrivateUser() != null) {
-            if (talk.getPrivateUser().equals(request.getUserId())) {
-                response.reply(talk.getReply().replace("{@u}", CQUtils.at(request.getUserId())));
-            }
-        } else {
-            response.reply(talk.getReply().replace("{@u}", CQUtils.at(request.getUserId())));
-        }
-    }*/
 }

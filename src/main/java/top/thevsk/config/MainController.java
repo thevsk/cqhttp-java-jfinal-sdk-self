@@ -29,7 +29,7 @@ public class MainController extends Controller {
 
     private void run() {
         new Thread(() -> {
-            if (body == null) {
+            if (StrKit.isBlank(body)) {
                 body = HttpKit.readData(getRequest());
             }
             ApiRequest apiRequest = new ApiRequest(JSONObject.parseObject(body));

@@ -8,9 +8,13 @@ import top.thevsk.annotation.BotMessage;
 import top.thevsk.annotation.BotService;
 import top.thevsk.entity.ApiRequest;
 import top.thevsk.entity.ApiResponse;
+import top.thevsk.entity.Constants;
 import top.thevsk.enums.MessageType;
+import top.thevsk.utils.TimeUtils;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * @author thevsk
@@ -41,6 +45,17 @@ public class JsoupService {
         if (jsonObject.getInteger("code") == 200 || jsonObject.getInteger("code") == 500) {
             if (!StrKit.isBlank(jsonObject.getString("data"))) {
                 response.replyList(jsonObject.getString("data"));
+                try {
+                    String sql = "insert into usage_statistics values(?, ?, ?, ?)";
+                    List<Object> param = new ArrayList<>();
+                    param.add(request.getGroupId().toString());
+                    param.add(request.getUserId().toString());
+                    param.add(request.getMessage().trim());
+                    param.add(TimeUtils.getCurrentTime());
+                    Constants.database.execute(sql, param.toArray());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         }
     }

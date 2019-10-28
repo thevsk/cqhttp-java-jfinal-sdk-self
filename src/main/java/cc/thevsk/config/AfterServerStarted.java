@@ -1,10 +1,10 @@
 package cc.thevsk.config;
 
-import cc.thevsk.entity.Constants;
+import top.thevsk.entity.Constants;
+import top.thevsk.start.JettyStart;
+import top.thevsk.utils.SQLiteUtils;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedList;
 
 /**
  * @author thevsk
@@ -15,7 +15,18 @@ import java.util.LinkedList;
 public class AfterServerStarted {
 
     public static void todo() {
-        Constants.repeat2Last = new HashMap<>();
-        Constants.talks = new LinkedList<>();
+        try {
+            Constants.database = new SQLiteUtils(JettyStart.getStartPath() + JettyStart.separator + "database.db");
+            Constants.database.createTable("usage_statistics", new ArrayList<SQLiteUtils.TableColumn>() {
+                {
+                    add(new SQLiteUtils.TableColumn("group_id"));
+                    add(new SQLiteUtils.TableColumn("user_id"));
+                    add(new SQLiteUtils.TableColumn("command"));
+                    add(new SQLiteUtils.TableColumn("create_time"));
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
