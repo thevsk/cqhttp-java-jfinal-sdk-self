@@ -16,14 +16,10 @@ public class TestService {
 
     @BotMessage(messageType = MessageType.GROUP, filter = "startWith:ROLL,roll")
     public void roll(ApiRequest request, ApiResponse response) {
-        try {
-            int min = 1;
-            int max = Integer.valueOf(request.getMessage().trim()) + 1;
-            int res = new Random().nextInt(max - min) + min;
-            response.replyAt(res + "");
-        } catch (Exception e) {
-            e.getMessage();
-        }
+        int min = 1;
+        int max = Integer.parseInt(request.getMessage().trim()) + 1;
+        int res = new Random().nextInt(max - min) + min;
+        response.replyAt(res + "");
     }
 
     @BotMessage(messageType = MessageType.GROUP, filter = "startWith:!qr")
@@ -54,24 +50,8 @@ public class TestService {
 
     @BotMessage(messageType = MessageType.GROUP, filter = "startWith:#")
     public void check(ApiRequest request, ApiResponse response) {
-        try {
-            if (request.getMessage().equals("查询二次元浓度")) {
-                int res = new Random().nextInt(4);
-                String temp;
-                switch (res) {
-                    case 1:
-                        temp = "0.6657%";
-                        break;
-                    case 2:
-                        temp = "66.57%";
-                        break;
-                    default:
-                        temp = "6657%";
-                }
-                response.reply("二次元浓度：" + temp);
-            }
-        } catch (Exception e) {
-            e.getMessage();
+        if (request.getMessage().equals("查询二次元浓度")) {
+            response.reply("二次元浓度：6657%");
         }
     }
 }

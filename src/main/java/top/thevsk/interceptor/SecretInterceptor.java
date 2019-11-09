@@ -7,7 +7,6 @@ import com.jfinal.kit.LogKit;
 import com.jfinal.kit.PropKit;
 import com.jfinal.kit.StrKit;
 import top.thevsk.config.MainController;
-import top.thevsk.utils.HmacSHA1Utils;
 
 public class SecretInterceptor implements Interceptor {
 
@@ -21,15 +20,15 @@ public class SecretInterceptor implements Interceptor {
                 return;
             }
             String body = HttpKit.readData(invocation.getController().getRequest());
-            String hmacSha1 = HmacSHA1Utils.hmacSha1(body.getBytes(), secret.getBytes());
-            if (hmacSha1 == null) {
-                onError(invocation);
-                return;
-            }
-            if (!sha1.contains(hmacSha1.toLowerCase())) {
-                onError(invocation);
-                return;
-            }
+//            String hmacSha1 = HmacSHA1Utils.hmacSha1(body.getBytes(), secret.getBytes());
+//            if (hmacSha1 == null) {
+//                onError(invocation);
+//                return;
+//            }
+//            if (!sha1.contains(hmacSha1.toLowerCase())) {
+//                onError(invocation);
+//                return;
+//            }
             MainController mainController = invocation.getTarget();
             mainController.body = body;
             invocation.invoke();

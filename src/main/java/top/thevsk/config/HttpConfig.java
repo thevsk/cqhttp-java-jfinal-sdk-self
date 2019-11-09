@@ -5,7 +5,6 @@ import com.jfinal.config.*;
 import com.jfinal.kit.LogKit;
 import com.jfinal.kit.PathKit;
 import com.jfinal.kit.PropKit;
-import com.jfinal.kit.StrKit;
 import com.jfinal.template.Engine;
 import top.thevsk.controller.QrController;
 import top.thevsk.interceptor.SecretInterceptor;
@@ -32,10 +31,8 @@ public class HttpConfig extends JFinalConfig {
     }
 
     public void configInterceptor(Interceptors interceptors) {
-        if (!StrKit.isBlank(PropKit.get("http.api.secret"))) {
-            interceptors.add(new SecretInterceptor());
-            LogKit.info("[拦截器] Secret 加载成功");
-        }
+        interceptors.add(new SecretInterceptor());
+        LogKit.info("[拦截器] Secret 加载成功");
     }
 
     public void configHandler(Handlers handlers) {
